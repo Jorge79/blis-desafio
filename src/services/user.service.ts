@@ -1,38 +1,39 @@
-import { createUserSchema } from './../validators/user.validator';
 import { PrismaClient, Users } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { createUserSchema } from '../validators/user.validator';
 import User from '../interfaces/User';
 
 export class UserService {
   private prisma: PrismaClient;
+  private readonly salt: number;
 
   constructor() {
     this.prisma = new PrismaClient();
+    this.salt = Number(process.env.BCRYPT_SALT) || 10;
   }
 
-  async createUser(User): Promise<Partial<Users>> {
-    const { error } = createUserSchema.validate(User);
-
+  async createUser(user: User): Promise<Partial<Users>> {
+    const { error } = createUserSchema.validate(user);
     if (error) {
       throw new Error(error.details[0].message);
     }
 
     const existingUser = await this.prisma.users.findUnique({
-      where: { email: User.email },
+      where: { email: user.email },
     });
 
     if (existingUser) {
       throw new Error('Usuário com este email já existe');
     }
 
-    const criptoPassword = await bcrypt.hash(User.password, 10);
+    const hashedPassword = await bcrypt.hash(user.password, this.salt);
 
     const newUser = await this.prisma.users.create({
       data: {
-        name: User.name,
-        email: User.email,
-        password: criptoPassword,
-        birthdate: new Date(User.birthdate),
+        name: user.name,
+        email: user.email,
+        password: hashedPassword,
+        birthdate: new Date(user.birthdate),
       },
       select: {
         id: true,
@@ -57,7 +58,7 @@ export class UserService {
     });
   }
 
-  async getUserById(userId: string): Promise<Partial<Users>> {
+  async getUserById(userId: string): Promise<Partial<Users> | null> {
     return await this.prisma.users.findUnique({
       where: { id: userId },
       select: {
