@@ -14,7 +14,7 @@ class UserDocumentService {
     });
 
     if (!userExists) {
-      const error = new Error('User not found');
+      const error = new Error('Usuário não encontrado');
       error.name = 'NotFoundError';
       throw error;
     }
@@ -30,7 +30,7 @@ class UserDocumentService {
 
       return userDocument;
     } catch (error) {
-      const serviceError = new Error('Error creating user document');
+      const serviceError = new Error('Erro ao criar documento do usuário');
       serviceError.name = 'ServiceError';
       throw serviceError;
     }
@@ -44,7 +44,7 @@ class UserDocumentService {
 
       return documents;
     } catch (error) {
-      const serviceError = new Error('Error fetching user documents');
+      const serviceError = new Error('Erro ao buscar documentos do usuário');
       serviceError.name = 'ServiceError';
       throw serviceError;
     }

@@ -5,9 +5,9 @@ import { fileURLToPath } from 'url';
 import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import userDocumentRoutes from './routes/userDocument.routes';
+import abilitiesRoutes from './routes/abilities.routes';
 import 'dotenv/config';
 
-// Obter __dirname equivalente
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -23,19 +23,16 @@ const startServer = async () => {
   const app = express();
   const port = process.env.PORT || 3000;
 
-  // Middleware
   app.use(express.json());
 
-  // Criar diretório de uploads se não existir
   const uploadsDir = createUploadsDirectory();
 
-  // Static files
   app.use('/uploads', express.static(uploadsDir));
 
-  // Routes
   app.use(userRoutes);
   app.use(authRoutes);
   app.use(userDocumentRoutes);
+  app.use(abilitiesRoutes);
 
   app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
