@@ -39,4 +39,27 @@ export class AbilitiesController {
       });
     }
   }
+
+  async update(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const { active } = req.body;
+
+      if (typeof active !== 'boolean') {
+        return res
+          .status(400)
+          .json({ error: 'O campo active deve ser um booleano' });
+      }
+
+      const updatedAbility = await this.abilitiesService.update(id, active);
+      return res.status(200).json(updatedAbility);
+    } catch (error) {
+      return res.status(400).json({
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Erro ao atualizar habilidade',
+      });
+    }
+  }
 }

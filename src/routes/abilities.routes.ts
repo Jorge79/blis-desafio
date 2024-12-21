@@ -8,4 +8,8 @@ router.post('/abilities', (req, res) => abilitiesController.create(req, res));
 
 router.get('/abilities', (req, res) => abilitiesController.listAll(req, res));
 
+router.put('/abilities/:id', (req, res) =>
+  abilitiesController.update(req, res),
+);
+
 export default router;

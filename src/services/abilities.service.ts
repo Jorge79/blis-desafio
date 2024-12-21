@@ -33,7 +33,25 @@ export class AbilitiesService {
         id: true,
         name: true,
         active: true,
-        created_at: true,
+      },
+    });
+  }
+
+  async update(id: string, active: boolean): Promise<Abilities> {
+    const abilityExists = await this.prisma.abilities.findUnique({
+      where: { id },
+    });
+
+    if (!abilityExists) {
+      throw new Error('Habilidade não encontrada');
+    }
+
+    return await this.prisma.abilities.update({
+      where: { id },
+      data: { active },
+      select: {
+        name: true,
+        active: true,
       },
     });
   }
