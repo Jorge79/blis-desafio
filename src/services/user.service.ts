@@ -1,7 +1,7 @@
 import { PrismaClient, Users } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { createUserSchema } from '../validators/user.validator';
-import User from '../interfaces/User';
+import User from '../../types/user';
 
 export class UserService {
   private prisma: PrismaClient;
@@ -9,7 +9,7 @@ export class UserService {
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.salt = Number(process.env.BCRYPT_SALT) || 10;
+    this.salt = Number(process.env.BCRYPT_SALT);
   }
 
   async createUser(user: User): Promise<Partial<Users>> {

@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.salt = Number(process.env.BCRYPT_SALT) || 10;
+    this.salt = Number(process.env.BCRYPT_SALT);
   }
 
   private async comparePasswords(
