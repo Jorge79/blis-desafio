@@ -6,6 +6,7 @@ import userRoutes from './routes/user.routes';
 import authRoutes from './routes/auth.routes';
 import userDocumentRoutes from './routes/userDocument.routes';
 import abilitiesRoutes from './routes/abilities.routes';
+import userAbilities from './routes/userAbilities.routes';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -29,10 +30,11 @@ const startServer = async () => {
 
   app.use('/uploads', express.static(uploadsDir));
 
-  app.use(userRoutes);
+  app.use(abilitiesRoutes);
+  app.use(userAbilities);
   app.use(authRoutes);
   app.use(userDocumentRoutes);
-  app.use(abilitiesRoutes);
+  app.use(userRoutes);
 
   app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
