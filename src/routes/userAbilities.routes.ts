@@ -12,4 +12,8 @@ router.delete('/users/abilities', (req, res) =>
   userAbilitiesController.delete(req, res),
 );
 
+router.get('/users/abilities', (req, res) =>
+  userAbilitiesController.listAll(req, res),
+);
+
 export default router;

@@ -84,4 +84,58 @@ export class UserAbilitiesService {
 
     return { message: 'Habilidades removidas com sucesso' };
   }
+
+  async listUsersAbilities(page: number = 1, limit: number = 2) {
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.usersAbilities.findMany({
+        skip,
+        take: limit,
+        orderBy: {
+          created_at: 'desc',
+        },
+        select: {
+          id: true,
+          years_experience: true,
+          created_at: true,
+          updated_at: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              birthdate: true,
+              created_at: true,
+              updated_at: true,
+            },
+          },
+          ability: {
+            select: {
+              id: true,
+              name: true,
+              active: true,
+              created_at: true,
+              updated_at: true,
+            },
+          },
+        },
+      }),
+      this.prisma.usersAbilities.count(),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
 }

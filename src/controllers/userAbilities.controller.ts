@@ -72,4 +72,36 @@ export class UserAbilitiesController {
       });
     }
   }
+
+  async listAll(req: Request, res: Response) {
+    try {
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+
+      if (page < 1) {
+        return res.status(400).json({
+          error: 'O número da página deve ser maior que zero',
+        });
+      }
+
+      if (limit < 1) {
+        return res.status(400).json({
+          error: 'O limite por página deve ser maior que zero',
+        });
+      }
+
+      const result = await this.userAbilitiesService.listUsersAbilities(
+        page,
+        limit,
+      );
+
+      return res.status(200).json(result);
+    } catch (error) {
+      console.error('Erro ao listar habilidades dos usuários:', error);
+      return res.status(500).json({
+        error:
+          error instanceof Error ? error.message : 'Erro interno do servidor',
+      });
+    }
+  }
 }
