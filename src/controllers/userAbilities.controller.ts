@@ -60,7 +60,7 @@ export class UserAbilitiesController {
       await this.userAbilitiesService.delete(user_id, abilities_ids);
 
       return res.status(200).json({
-        message: 'Habilidades removidas com sucesso',
+        message: 'Uma ou mais habilidades removidas com sucesso',
       });
     } catch (error) {
       console.error('Erro ao remover habilidades:', error);
